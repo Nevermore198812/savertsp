@@ -7,7 +7,7 @@ RTSPURL = "rtsp://admin:zq888888@192.168.8.135:554/Streaming/tracks/"
 FFMPEGEXPBEGIN = "ffmpeg -loglevel debug -rtsp_transport tcp -i"
 FFMPEGEXPEND = "-vcodec copy -an -t"
 SPACE = " "
-FILEDIR = "/home/pi/videos/"
+FILEDIR = "~/videos/"
 
 class Info:
   def __init__(self, line):
@@ -35,7 +35,7 @@ def transformToInfo(line):
 
 def constructShell(info):
   url = constructUrl(info)
-  name = info.startTimeStr + "-" + info.endTimeStr + ".mp4"
+  name = info.channel + info.startTimeStr + "-" + info.endTimeStr + ".mp4"
   return FFMPEGEXPBEGIN + SPACE + "\"" + url + "\"" + SPACE + FFMPEGEXPEND + SPACE + str(info.duration) + SPACE + FILEDIR + name 
 
 infoContents = openFile()
@@ -43,6 +43,5 @@ linelist = filter(lambda x: len(x) > 0, infoContents.split("\n"))
 infoList = map(transformToInfo , linelist)
 for info in infoList:
   shell = constructShell(info)
-  print shell
-  #os.system(shell)
+  os.system(shell)
 
